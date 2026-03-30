@@ -1,0 +1,47 @@
+package com.example.controlefinanceiroapi.controller;
+
+import com.example.controlefinanceiroapi.dto.dtoRequest.ContaRequestDTO;
+import com.example.controlefinanceiroapi.dto.dtoResponse.ContaResponseDTO;
+import com.example.controlefinanceiroapi.exception.NotFoundException;
+import com.example.controlefinanceiroapi.model.Conta;
+import com.example.controlefinanceiroapi.service.ContaService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/conta")
+public class ContaController {
+
+    private final ContaService contaService;
+
+    public ContaController(ContaService contaService) {
+        this.contaService = contaService;
+    }
+
+    @PostMapping
+    public ContaResponseDTO salvarConta(@RequestBody ContaRequestDTO dto){
+        return contaService.salvarConta(dto);
+    }
+
+    @PutMapping("{id}")
+    public ContaResponseDTO atualizarConta(@PathVariable UUID id, @RequestBody ContaRequestDTO dto){
+        return contaService.atualizarConta(id, dto);
+    }
+
+    @GetMapping("{id}")
+    public ContaResponseDTO buscarContaPorId(@PathVariable UUID id){
+        return contaService.buscarContaPorId(id);
+    }
+
+    @DeleteMapping("{id}")
+    public void deletarConta(@PathVariable UUID id){
+        contaService.deletarConta(id);
+    }
+
+    @GetMapping
+    public List<Conta> listarContas(){
+        return contaService.listarContas();
+    }
+}
