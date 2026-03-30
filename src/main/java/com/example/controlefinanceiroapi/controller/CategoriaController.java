@@ -42,7 +42,7 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public List<Categoria> listarCategorias(){
+    public List<CategoriaResponseDTO> listarCategorias(){
         return categoriaService.listarCategorias();
     }
 }

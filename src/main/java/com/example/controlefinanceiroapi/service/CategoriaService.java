@@ -7,6 +7,7 @@ import com.example.controlefinanceiroapi.model.Categoria;
 import com.example.controlefinanceiroapi.repository.CategoriasRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +47,14 @@ public class CategoriaService {
         categoriasRepository.deleteById(id);
    }
 
-   public List<Categoria> listarCategorias(){
-        return categoriasRepository.findAll();
+   public List<CategoriaResponseDTO> listarCategorias(){
+        List<Categoria> categorias = categoriasRepository.findAll();
+        List<CategoriaResponseDTO> categoriasResponse = new ArrayList<>();
+
+        for(Categoria categoria : categorias){
+            CategoriaResponseDTO categoriaResponseDTO = new CategoriaResponseDTO(categoria.getId(), categoria.getNome());
+            categoriasResponse.add(categoriaResponseDTO);
+        }
+       return categoriasResponse;
    }
 }

@@ -9,6 +9,7 @@ import com.example.controlefinanceiroapi.repository.ContasRepository;
 import com.example.controlefinanceiroapi.repository.UsuariosRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,7 +72,14 @@ public class ContaService {
         contasRepository.deleteById(id);
     }
 
-    public List<Conta> listarContas(){
-        return contasRepository.findAll();
+    public List<ContaResponseDTO> listarContas(){
+        List<Conta> contas = contasRepository.findAll();
+        List<ContaResponseDTO> contasResponse = new ArrayList<>();
+
+        for(Conta conta : contas){
+            ContaResponseDTO contaResponseDTO = new ContaResponseDTO(conta.getId(), conta.getNome(), conta.getSaldo(), conta.getUsuario());
+            contasResponse.add(contaResponseDTO);
+        }
+        return contasResponse;
     }
 }

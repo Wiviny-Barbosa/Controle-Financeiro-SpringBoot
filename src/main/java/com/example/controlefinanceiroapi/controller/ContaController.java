@@ -41,7 +41,7 @@ public class ContaController {
     }
 
     @GetMapping
-    public List<Conta> listarContas(){
+    public List<ContaResponseDTO> listarContas(){
         return contaService.listarContas();
     }
 }

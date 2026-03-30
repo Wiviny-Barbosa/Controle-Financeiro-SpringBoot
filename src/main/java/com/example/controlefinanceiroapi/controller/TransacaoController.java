@@ -41,7 +41,7 @@ public class TransacaoController {
     }
 
     @GetMapping
-    public List<Transacao> listarTransacao(){
+    public List<TransacaoResponseDTO> listarTransacao(){
         return transacaoService.listarTransacao();
     }
 }

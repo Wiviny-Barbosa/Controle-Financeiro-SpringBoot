@@ -41,7 +41,7 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<Usuario> listarUsuario(){
+    public List<UsuarioResponseDTO> listarUsuario(){
         return usuarioService.listarUsuario();
     }
 

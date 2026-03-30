@@ -12,6 +12,7 @@ import com.example.controlefinanceiroapi.repository.ContasRepository;
 import com.example.controlefinanceiroapi.repository.TransacoesRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -91,7 +92,16 @@ public class TransacaoService {
         transacoesRepository.deleteById(id);
     }
 
-    public List<Transacao> listarTransacao(){
-        return transacoesRepository.findAll();
+    public List<TransacaoResponseDTO> listarTransacao(){
+        List<Transacao> transacaos = transacoesRepository.findAll();
+        List<TransacaoResponseDTO> transacaoResponse = new ArrayList<>();
+
+        for(Transacao transacao : transacaos){
+            TransacaoResponseDTO transacaoResponseDTO = new TransacaoResponseDTO(transacao.getId(), transacao.getDescricao(),
+                    transacao.getValor(), transacao.getTipo(), transacao.getData(), transacao.getConta(), transacao.getCategoria());
+            transacaoResponse.add(transacaoResponseDTO);
+        }
+
+        return transacaoResponse;
     }
 }

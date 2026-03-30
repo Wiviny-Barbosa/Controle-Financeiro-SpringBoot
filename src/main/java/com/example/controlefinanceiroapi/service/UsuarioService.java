@@ -7,6 +7,7 @@ import com.example.controlefinanceiroapi.model.Usuario;
 import com.example.controlefinanceiroapi.repository.UsuariosRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,7 +55,15 @@ public class UsuarioService {
         usuariosRepository.deleteById(id);
     }
 
-    public List<Usuario> listarUsuario(){
-        return usuariosRepository.findAll();
+    public List<UsuarioResponseDTO> listarUsuario(){
+        List<Usuario> usuarios = usuariosRepository.findAll();
+        List<UsuarioResponseDTO> usuarioResponse = new ArrayList<>();
+
+        for(Usuario usuario : usuarios){
+            UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail());
+            usuarioResponse.add(usuarioResponseDTO);
+        }
+        
+        return usuarioResponse;
     }
 }
