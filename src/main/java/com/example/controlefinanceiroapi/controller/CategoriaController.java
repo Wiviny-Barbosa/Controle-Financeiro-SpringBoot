@@ -6,6 +6,7 @@ import com.example.controlefinanceiroapi.exception.NotFoundException;
 import com.example.controlefinanceiroapi.model.Categoria;
 import com.example.controlefinanceiroapi.service.CategoriaService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class CategoriaController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public CategoriaResponseDTO salvarCategoria(@RequestBody @Valid CategoriaRequestDTO dto){
         return categoriaService.salvarCategoria(dto);
     }
@@ -37,6 +39,7 @@ public class CategoriaController {
     }
 
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarCategoria(@PathVariable("id") UUID id) {
         categoriaService.deletarCategoria(id);
     }

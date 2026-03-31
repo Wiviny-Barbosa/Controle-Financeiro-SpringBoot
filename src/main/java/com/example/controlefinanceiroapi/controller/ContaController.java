@@ -5,6 +5,7 @@ import com.example.controlefinanceiroapi.dto.dtoResponse.ContaResponseDTO;
 import com.example.controlefinanceiroapi.exception.NotFoundException;
 import com.example.controlefinanceiroapi.model.Conta;
 import com.example.controlefinanceiroapi.service.ContaService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class ContaController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ContaResponseDTO salvarConta(@RequestBody ContaRequestDTO dto){
         return contaService.salvarConta(dto);
     }
@@ -36,6 +38,7 @@ public class ContaController {
     }
 
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarConta(@PathVariable UUID id){
         contaService.deletarConta(id);
     }

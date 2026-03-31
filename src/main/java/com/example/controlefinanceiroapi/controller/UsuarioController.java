@@ -5,6 +5,7 @@ import com.example.controlefinanceiroapi.dto.dtoResponse.UsuarioResponseDTO;
 import com.example.controlefinanceiroapi.model.Usuario;
 import com.example.controlefinanceiroapi.service.UsuarioService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class UsuarioController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public UsuarioResponseDTO criarUsuario(@RequestBody @Valid UsuarioRequestDTO dto){
         return usuarioService.salvarUsuario(dto);
     }
@@ -36,6 +38,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarUsuario(@PathVariable UUID id){
         usuarioService.deletarUsuario(id);
     }

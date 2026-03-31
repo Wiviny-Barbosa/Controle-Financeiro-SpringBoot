@@ -5,6 +5,7 @@ import com.example.controlefinanceiroapi.dto.dtoRequest.TransacaoRequestDTO;
 import com.example.controlefinanceiroapi.dto.dtoResponse.TransacaoResponseDTO;
 import com.example.controlefinanceiroapi.model.Transacao;
 import com.example.controlefinanceiroapi.service.TransacaoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class TransacaoController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public TransacaoResponseDTO salvarTransacao(@RequestBody TransacaoRequestDTO dto){
             return transacaoService.salvarTransacao(dto);
     }
@@ -36,6 +38,7 @@ public class TransacaoController {
     }
 
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarTransacao(@PathVariable UUID id){
         transacaoService.deletarTransacao(id);
     }
