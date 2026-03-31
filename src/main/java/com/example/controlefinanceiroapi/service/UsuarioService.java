@@ -63,7 +63,7 @@ public class UsuarioService {
             UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail());
             usuarioResponse.add(usuarioResponseDTO);
         }
-        
+
         return usuarioResponse;
     }
 }
