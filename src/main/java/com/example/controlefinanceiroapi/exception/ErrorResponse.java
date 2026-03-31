@@ -10,7 +10,6 @@ import lombok.*;
 public class ErrorResponse {
     private String mensagem;
     private Integer status;
+    private String field;
 
-    public ErrorResponse(String message, String field) {
-    }
 }

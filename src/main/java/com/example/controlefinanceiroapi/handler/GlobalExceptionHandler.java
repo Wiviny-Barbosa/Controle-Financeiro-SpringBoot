@@ -47,7 +47,7 @@ public class GlobalExceptionHandler{
 
         e.getBindingResult().getFieldErrors().forEach(err -> {
             String message = messageSource.getMessage(err, LocaleContextHolder.getLocale());
-            ErrorResponse error = new ErrorResponse(message, err.getField());
+            ErrorResponse error = new ErrorResponse(message,HttpStatus.BAD_REQUEST.value(),err.getField());
             dto.add(error);
         });
         return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
