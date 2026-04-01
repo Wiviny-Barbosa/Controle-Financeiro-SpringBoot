@@ -11,6 +11,7 @@ import com.example.controlefinanceiroapi.repository.CategoriasRepository;
 import com.example.controlefinanceiroapi.repository.ContasRepository;
 import com.example.controlefinanceiroapi.repository.TransacoesRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class TransacaoService {
         this.categoriasRepository = categoriasRepository;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public TransacaoResponseDTO salvarTransacao(TransacaoRequestDTO dto){
         Conta conta = contasRepository.findById(dto.contaId())
                 .orElseThrow(() -> new NotFoundException("Conta não encontrada"));
@@ -51,6 +53,7 @@ public class TransacaoService {
         return new TransacaoResponseDTO(salvo.getId(), salvo.getDescricao(), salvo.getValor(), salvo.getTipo(), salvo.getData(), salvo.getConta(), salvo.getCategoria());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public TransacaoResponseDTO atualizarTransacao(UUID id, TransacaoRequestDTO dto){
         Transacao transacao = transacoesRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Transação não encontrada"));
@@ -85,9 +88,15 @@ public class TransacaoService {
         return new TransacaoResponseDTO(salvo.getId(), salvo.getDescricao(), salvo.getValor(), salvo.getTipo(), salvo.getData(), salvo.getConta(), salvo.getCategoria());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deletarTransacao(UUID id){
-        if(!transacoesRepository.existsById(id)){
-            throw new NotFoundException("Transação não encontrada");
+        Transacao transacao = transacoesRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Transação com ID "+id+" não encontrado."));
+
+        if(transacao.getTipo() == TipoEnum.ENTRADA){
+            transacao.getConta().setSaldo(transacao.getConta().getSaldo() - transacao.getValor());
+        } else {
+            transacao.getConta().setSaldo(transacao.getConta().getSaldo() + transacao.getValor());
         }
         transacoesRepository.deleteById(id);
     }
@@ -101,7 +110,6 @@ public class TransacaoService {
                     transacao.getValor(), transacao.getTipo(), transacao.getData(), transacao.getConta(), transacao.getCategoria());
             transacaoResponse.add(transacaoResponseDTO);
         }
-
         return transacaoResponse;
     }
 }
