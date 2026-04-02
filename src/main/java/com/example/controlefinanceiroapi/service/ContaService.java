@@ -2,6 +2,7 @@ package com.example.controlefinanceiroapi.service;
 
 import com.example.controlefinanceiroapi.dto.dtoRequest.ContaRequestDTO;
 import com.example.controlefinanceiroapi.dto.dtoResponse.ContaResponseDTO;
+import com.example.controlefinanceiroapi.exception.BusinnesException;
 import com.example.controlefinanceiroapi.exception.NotFoundException;
 import com.example.controlefinanceiroapi.model.Conta;
 import com.example.controlefinanceiroapi.model.Usuario;
@@ -29,7 +30,7 @@ public class ContaService {
                 .orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
 
         if(dto.saldo() < 0){
-            throw new IllegalArgumentException("Saldo não pode ser negativo");
+            throw new BusinnesException("Saldo não pode ser negativo");
         }
 
         Conta conta = new Conta();
@@ -55,7 +56,7 @@ public class ContaService {
                 .orElseThrow(() -> new NotFoundException("Usuario não encontrado"));
 
         if(dto.saldo() < 0){
-            throw new NotFoundException("Saldo não pode ser negativo");
+            throw new BusinnesException("Saldo não pode ser negativo");
         }
 
         conta.setNome(dto.nome());

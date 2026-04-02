@@ -2,6 +2,7 @@ package com.example.controlefinanceiroapi.service;
 
 import com.example.controlefinanceiroapi.dto.dtoRequest.UsuarioRequestDTO;
 import com.example.controlefinanceiroapi.dto.dtoResponse.UsuarioResponseDTO;
+import com.example.controlefinanceiroapi.exception.BusinnesException;
 import com.example.controlefinanceiroapi.exception.NotFoundException;
 import com.example.controlefinanceiroapi.model.Usuario;
 import com.example.controlefinanceiroapi.repository.UsuariosRepository;
@@ -26,7 +27,7 @@ public class UsuarioService {
         usuario.setSenha(dto.senha());
 
         if(usuariosRepository.existsByEmail(usuario.getEmail())){
-            throw new NotFoundException("Email não pode ser duplicado.");
+            throw new BusinnesException("Email não pode ser duplicado.");
         }
         Usuario salvo = usuariosRepository.save(usuario);
 
@@ -50,7 +51,7 @@ public class UsuarioService {
 
     public void deletarUsuario(UUID id){
         if(!usuariosRepository.existsById(id)){
-            throw new NotFoundException("Não existe esse usuario");
+            throw new NotFoundException("Usuario não encontrado");
         }
         usuariosRepository.deleteById(id);
     }

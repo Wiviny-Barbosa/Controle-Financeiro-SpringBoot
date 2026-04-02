@@ -1,5 +1,6 @@
 package com.example.controlefinanceiroapi.handler;
 
+import com.example.controlefinanceiroapi.exception.BusinnesException;
 import com.example.controlefinanceiroapi.exception.ErrorResponse;
 import com.example.controlefinanceiroapi.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,16 @@ public class GlobalExceptionHandler{
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(BusinnesException.class)
+    public ResponseEntity<ErrorResponse> handlerBusinnesException(BusinnesException ex){
+        ErrorResponse response = ErrorResponse.builder()
+                .mensagem(ex.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(Exception.class)
