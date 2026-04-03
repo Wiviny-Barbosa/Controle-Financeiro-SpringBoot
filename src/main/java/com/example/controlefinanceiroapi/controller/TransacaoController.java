@@ -5,6 +5,7 @@ import com.example.controlefinanceiroapi.dto.dtoRequest.TransacaoRequestDTO;
 import com.example.controlefinanceiroapi.dto.dtoResponse.TransacaoResponseDTO;
 import com.example.controlefinanceiroapi.model.Transacao;
 import com.example.controlefinanceiroapi.service.TransacaoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,12 +24,12 @@ public class TransacaoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TransacaoResponseDTO salvarTransacao(@RequestBody TransacaoRequestDTO dto){
+    public TransacaoResponseDTO salvarTransacao(@RequestBody @Valid TransacaoRequestDTO dto){
             return transacaoService.salvarTransacao(dto);
     }
 
     @PutMapping("{id}")
-    public TransacaoResponseDTO atualizarTransacao(@PathVariable UUID id, @RequestBody TransacaoRequestDTO dto){
+    public TransacaoResponseDTO atualizarTransacao(@PathVariable UUID id, @RequestBody @Valid TransacaoRequestDTO dto){
         return transacaoService.atualizarTransacao(id, dto);
     }
 

@@ -29,10 +29,6 @@ public class ContaService {
         Usuario usuario = usuariosRepository.findById(dto.usuarioId())
                 .orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
 
-        if(dto.saldo() < 0){
-            throw new BusinnesException("Saldo não pode ser negativo");
-        }
-
         Conta conta = new Conta();
         conta.setNome(dto.nome());
         conta.setSaldo(dto.saldo());
@@ -54,10 +50,6 @@ public class ContaService {
                 .orElseThrow(() -> new NotFoundException("Conta não encontrado"));
         Usuario usuario = usuariosRepository.findById(dto.usuarioId())
                 .orElseThrow(() -> new NotFoundException("Usuario não encontrado"));
-
-        if(dto.saldo() < 0){
-            throw new BusinnesException("Saldo não pode ser negativo");
-        }
 
         conta.setNome(dto.nome());
         conta.setSaldo(dto.saldo());

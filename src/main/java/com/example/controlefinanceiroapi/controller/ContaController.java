@@ -5,6 +5,7 @@ import com.example.controlefinanceiroapi.dto.dtoResponse.ContaResponseDTO;
 import com.example.controlefinanceiroapi.exception.NotFoundException;
 import com.example.controlefinanceiroapi.model.Conta;
 import com.example.controlefinanceiroapi.service.ContaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,12 +24,12 @@ public class ContaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ContaResponseDTO salvarConta(@RequestBody ContaRequestDTO dto){
+    public ContaResponseDTO salvarConta(@RequestBody @Valid ContaRequestDTO dto){
         return contaService.salvarConta(dto);
     }
 
     @PutMapping("{id}")
-    public ContaResponseDTO atualizarConta(@PathVariable UUID id, @RequestBody ContaRequestDTO dto){
+    public ContaResponseDTO atualizarConta(@PathVariable UUID id, @RequestBody @Valid ContaRequestDTO dto){
         return contaService.atualizarConta(id, dto);
     }
 
