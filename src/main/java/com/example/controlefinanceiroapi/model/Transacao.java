@@ -38,4 +38,18 @@ public class Transacao {
         this.conta = conta;
         this.categoria = categoria;
     }
+
+    public double aplicarEfeitoNoSaldo(double saldoConta) {
+        if (this.tipo == TipoEnum.ENTRADA) {
+            return saldoConta + this.valor;
+        }
+        return saldoConta - this.valor;
+    }
+
+    public double reverterEfeitoNoSaldo(double saldoConta) {
+        if (this.tipo == TipoEnum.ENTRADA) {
+            return saldoConta - this.valor;
+        }
+        return saldoConta + this.valor;
+    }
 }

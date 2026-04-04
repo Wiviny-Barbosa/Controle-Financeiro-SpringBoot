@@ -33,9 +33,9 @@ public class TransacaoService {
     @Transactional(rollbackFor = Exception.class)
     public TransacaoResponseDTO salvarTransacao(TransacaoRequestDTO dto){
         Conta conta = contasRepository.findById(dto.contaId())
-                .orElseThrow(() -> new NotFoundException("Conta não encontrada"));
+                        .orElseThrow(() -> new NotFoundException("Conta não encontrada"));
         Categoria categoria = categoriasRepository.findById(dto.categoriaId())
-                .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
+                        .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
 
         Transacao transacao = new Transacao();
         transacao.setDescricao(dto.descricao());
@@ -44,39 +44,33 @@ public class TransacaoService {
         transacao.setConta(conta);
         transacao.setCategoria(categoria);
 
-        if(dto.tipo() == TipoEnum.ENTRADA){
-            conta.setSaldo(conta.getSaldo() + dto.valor());
-        }else{
-            conta.setSaldo(conta.getSaldo() - dto.valor());
-        }
+        conta.setSaldo(transacao.aplicarEfeitoNoSaldo(conta.getSaldo()));
+
         Transacao salvo = transacoesRepository.save(transacao);
         return new TransacaoResponseDTO(salvo.getId(), salvo.getDescricao(), salvo.getValor(), salvo.getTipo(), salvo.getData(), salvo.getConta(), salvo.getCategoria());
     }
 
     @Transactional(rollbackFor = Exception.class)
     public TransacaoResponseDTO atualizarTransacao(UUID id, TransacaoRequestDTO dto){
+
         Transacao transacao = transacoesRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Transação não encontrada"));
+                        .orElseThrow(() -> new NotFoundException("Transação não encontrada"));
 
         Conta conta = contasRepository.findById(dto.contaId())
-                .orElseThrow(() -> new NotFoundException("Conta não encontrada"));
+                        .orElseThrow(() -> new NotFoundException("Conta não encontrada"));
 
-        if(transacao.getTipo() == TipoEnum.ENTRADA){
-            conta.setSaldo(conta.getSaldo() - transacao.getValor());
-        }else{
-            conta.setSaldo(conta.getSaldo() + transacao.getValor());
-        }
+        Categoria categoria = categoriasRepository.findById(dto.categoriaId())
+                        .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
+
+        transacao.getConta().setSaldo(transacao.reverterEfeitoNoSaldo(transacao.getConta().getSaldo()));
 
         transacao.setDescricao(dto.descricao());
         transacao.setValor(dto.valor());
         transacao.setTipo(dto.tipo());
+        transacao.setCategoria(categoria);
         transacao.setConta(conta);
 
-        if(dto.tipo() == TipoEnum.ENTRADA){
-            conta.setSaldo(conta.getSaldo() + dto.valor());
-        }else{
-            conta.setSaldo(conta.getSaldo() - dto.valor());
-        }
+        conta.setSaldo(transacao.aplicarEfeitoNoSaldo(conta.getSaldo()));
 
         Transacao salvo = transacoesRepository.save(transacao);
         return new TransacaoResponseDTO(salvo.getId(), salvo.getDescricao(), salvo.getValor(), salvo.getTipo(), salvo.getData(), salvo.getConta(), salvo.getCategoria());
@@ -84,20 +78,17 @@ public class TransacaoService {
 
     public TransacaoResponseDTO buscarTransacaoPorId(UUID id){
         Transacao salvo = transacoesRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Transação com ID "+id+" não encontrado."));
+                        .orElseThrow(() -> new NotFoundException("Transação com ID "+id+" não encontrado."));
         return new TransacaoResponseDTO(salvo.getId(), salvo.getDescricao(), salvo.getValor(), salvo.getTipo(), salvo.getData(), salvo.getConta(), salvo.getCategoria());
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void deletarTransacao(UUID id){
         Transacao transacao = transacoesRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Transação com ID "+id+" não encontrado."));
+                        .orElseThrow(() -> new NotFoundException("Transação com ID "+id+" não encontrado."));
 
-        if(transacao.getTipo() == TipoEnum.ENTRADA){
-            transacao.getConta().setSaldo(transacao.getConta().getSaldo() - transacao.getValor());
-        } else {
-            transacao.getConta().setSaldo(transacao.getConta().getSaldo() + transacao.getValor());
-        }
+        transacao.getConta().setSaldo(transacao.reverterEfeitoNoSaldo(transacao.getConta().getSaldo()));
+
         transacoesRepository.deleteById(id);
     }
 
